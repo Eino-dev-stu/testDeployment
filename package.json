@@ -1,14 +1,35 @@
 {
   "name": "software-testing-assignment",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a project template for students participating in Software Testing course\r at LAB University of Applied Sciences.",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no tests are implemented yet \" && exit 1"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.2",
+    "babel-jest": "^30.3.0",
+    "coveralls": "^3.1.1",
+    "jest": "^30.3.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/.internal/**"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petri-rantanen/AT00BY10.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/petri-rantanen/AT00BY10/issues"
+  },
+  "homepage": "https://github.com/petri-rantanen/AT00BY10#readme"
 }
