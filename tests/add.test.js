@@ -8,7 +8,7 @@ describe("add.js testit", () => {
     expect(add(6, -4)).toBe(2)
   })
 
-  test("lisää kaksi negatiivista lukua", () => {
+  test("lisää kaksi negatiivista lukua tanne", () => {
     expect(add(-6, -4)).toBe(-10)
   })
 
