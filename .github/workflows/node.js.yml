@@ -1,19 +1,19 @@
-name: Node.js CI
+steps:
+  - uses: actions/checkout@v4
+  - name: Use Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: "22"
+      cache: "npm"
 
-on: [push]
+  - run: npm install
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - run: npm install
-      - run: npm test -- --coverage # Ajaa Jestin ja luo raportin
-      - name: Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+  - name: Run Tests with Coverage
+    # Tämä luo coverage/lcov.info tiedoston, jota Coveralls etsii
+    run: node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage
+
+  - name: Coveralls GitHub Action
+    uses: coverallsapp/github-action@v2
+    with:
+      # TÄRKEÄ: Tämä rivi riittää tunnistautumiseen
+      github-token: ${{ secrets.GITHUB_TOKEN }}
