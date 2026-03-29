@@ -1,19 +1,33 @@
-steps:
-  - uses: actions/checkout@v4
-  - name: Use Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: "22"
-      cache: "npm"
+name: Node.js CI
 
-  - run: npm install
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
 
-  - name: Run Tests with Coverage
-    # Tämä luo coverage/lcov.info tiedoston, jota Coveralls etsii
-    run: node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
 
-  - name: Coveralls GitHub Action
-    uses: coverallsapp/github-action@v2
-    with:
-      # TÄRKEÄ: Tämä rivi riittää tunnistautumiseen
-      github-token: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage
+        # Käytetään tätä kikkaa, jotta ES-moduulit toimivat CI-ympäristössä
+        run: node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage
+
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
