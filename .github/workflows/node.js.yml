@@ -1,5 +1,5 @@
 name: Node.js CI
-
+# github toimii vain master ja main branchien kanssa, joten määritellään ne
 on:
   push:
     branches: ["main", "master"]
@@ -7,27 +7,28 @@ on:
     branches: ["main", "master"]
 
 jobs:
+  # Tämä job ajaa testit ja lähettää coverage-raportin coveralls palveluun
   test-and-coverage:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repository ## Tämä hakee koodin GitHubista, jotta sitä voidaan testata
+        uses: actions/checkout@v4 # Tämä on GitHubin virallinen action, joka hoitaa checkoutin
 
-      - name: Set up Node.js
+      - name: Set up Node.js ## Tämä asentaa Node.js:n ja npm:n, sekä ottaa npm-cachen käyttöön nopeuttaakseen asennusta
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: "npm"
 
-      - name: Install dependencies
+      - name: Install dependencies ## Tämä asentaa projektin npm-riippuvuudet, jotka on määritetty package.json-tiedostossa
         run: npm install
 
       - name: Run tests with coverage
-        # Käytetään tätä kikkaa, jotta ES-moduulit toimivat CI-ympäristössä
+        # Käytetään tätä jotta ES-moduulit toimivat CI-ympäristössä
         run: node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage
 
-      - name: Coveralls GitHub Action
+      - name: Coveralls GitHub Action ## Tämä lähettää coverage-raportin coveralls-palveluun, joka tarjoaa visuaalisen raportoinnin testikattavuudesta
         uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Tämä on GitHubin automaattisesti luoma token, joka antaa actionille oikeudet lähettää dataa coveralls-palveluun
